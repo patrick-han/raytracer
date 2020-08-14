@@ -21,8 +21,8 @@ public:
 	vec3 operator-() const { return vec3(-e[0], -e[1], e[2]); } // Negate
 
 	// Index access (should I use size_t for indices?)
-	double operator[](int i) const { return e[i]; } // For assignment
-	double& operator[](int i) { return e[i]; } // For const vec3
+	double operator[](int i) const { return e[i]; } // For const vec3
+	double& operator[](int i) { return e[i]; } // For assignment
 
 	vec3& operator+=(const vec3 &v) {
 		e[0] += v.e[0];
