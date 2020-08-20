@@ -28,7 +28,7 @@ int main() {
 	auto viewport_width = aspect_ratio * viewport_height;
 	auto focal_length = 1.0; // Distance from eye/camera to the viewport/projection plane
 
-	// Camera setup, we traverse from the lower left hand corner
+	// Camera setup
 	auto origin = point3(0, 0, 0);
 	auto horizontal = vec3(viewport_width, 0, 0);
 	auto vertical = vec3(0, viewport_height, 0);
