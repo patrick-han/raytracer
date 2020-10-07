@@ -10,13 +10,15 @@
  * Effects:
  *	Calculates and returns the color associated with the ray/pixel pair
  */
-color ray_color(const ray& r) {
-	vec3 unit_direction = unit_vector(r.direction()); // Normalize from -1 to 1
+color ray_color(const ray& r) 
+{
+	vec3 unit_direction = unit_vector(r.direction()); // Normalize direction to -1 to 1 unit vector
 	auto t = 0.5 * (unit_direction.y() + 1.0); // Blends between white and blue vertically since we use the y-component, scale to [0,1] [white, blue]
-	return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0); // blendedValue = (1-5)*startValue + t*endValue
+	return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0); // blendedValue = (1-t)*startValue + t*endValue
 }
 
-int main() {
+int main() 
+{
 
 	// Image aspect ratio and size
 	const auto aspect_ratio = 16.0 / 9.0;
@@ -25,7 +27,7 @@ int main() {
 
 	// Viewport setup
 	auto viewport_height = 2.0;
-	auto viewport_width = aspect_ratio * viewport_height;
+	auto viewport_width = aspect_ratio * viewport_height;;
 	auto focal_length = 1.0; // Distance from eye/camera to the viewport/projection plane
 
 	// Camera setup
@@ -35,23 +37,24 @@ int main() {
 	auto lower_left_corner = origin - horizontal / 2 - vertical / 2 - vec3(0, 0, focal_length);
 
 
-
 	// Render
 
 	std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
 	// Pixels are written left to right, rows from top to bottom
-	for (int j = image_height - 1; j >= 0; --j) {
+	for (int j = image_height - 1; j >= 0; --j) 
+	{
 
 		std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush; // Progress bar
 
-		for (int i = 0; i < image_width; ++i) {
+		for (int i = 0; i < image_width; ++i) 
+		{
 
 			// Normalized pixel coordinates used as offsets below
 			auto u = double(i) / (image_width - 1); 
 			auto v = double(j) / (image_height - 1);
-			ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin);
-			color pixel_color = ray_color(r);
+			ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin); // Create ray
+			color pixel_color = ray_color(r); // Generate color based on the ray
 			write_color(std::cout, pixel_color);
 		}
 	}
