@@ -90,6 +90,8 @@ int main()
 		for (int i = 0; i < image_width; ++i) 
 		{
 			color pixel_color(0, 0, 0);
+
+			// Accumulate multiple rays per pixel (samples), which get averaged in write_color()
 			for (int s = 0; s < samples_per_pixel; ++s) {
 				// Approximately the middle of the pixel, and then some added randomness to sample
 				auto u = (i + random_double()) / (image_width - 1);
