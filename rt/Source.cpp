@@ -13,17 +13,17 @@
 double hit_sphere(const point3& center, double radius, const ray& r)
 {
 	vec3 oc = r.origin() - center; // A - C --> Ray origin - Center coords of the sphere
-	auto a = dot(r.direction(), r.direction()); // t^2 * dot(b,b) = t^2 * a
-	auto b = 2.0 * dot(r.direction(), oc);
-	auto c = dot(oc, oc) - radius * radius;
-	auto discriminant = b * b - 4 * a * c;
+	auto a = r.direction().length_squared();
+	auto half_b = dot(oc, r.direction());
+	auto c = oc.length_squared() - radius * radius;
+	auto discriminant = half_b * half_b - a * c;
 	if (discriminant < 0)
 	{
 		return -1.0;
 	}
 	else
 	{
-		return (-b - sqrt(discriminant)) / (2.0 * a);
+		return (-half_b - sqrt(discriminant)) / a;
 	}
 }
 
