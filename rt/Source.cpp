@@ -1,7 +1,10 @@
 #include <iostream>
-#include "ray.h"
-#include "vec3.h"
+
+#include "rtweekend.h"
+
 #include "color.h"
+#include "hittable_list.h"
+#include "sphere.h"
 
 /*
  * Requires:
@@ -35,18 +38,18 @@ double hit_sphere(const point3& center, double radius, const ray& r)
  * Effects:
  *	Calculates and returns the color associated with the ray/pixel pair
  */
-color ray_color(const ray& r) 
+color ray_color(const ray& r, const hittable& world) 
 {
-	auto t = hit_sphere(point3(0, 0, -1), 0.5, r);
-	if (t > 0.0)
+	// Actual scene objects
+	hit_record rec;
+	if (world.hit(r, 0, infinity, rec))
 	{
-		// Calculate normal vector (-1, 1), scaling to (0, 1)
-		vec3 normal = unit_vector(r.at(t) - vec3(0, 0, -1)); // N = normalize( P ( on the sphere) - Center (of the sphere) )
-		return 0.5 * color(normal.x() + 1, normal.y() + 1, normal.z() + 1);
+		return 0.5 * (rec.normal + color(1, 1, 1));
 	}
 
-	vec3 unit_direction = unit_vector(r.direction()); // Normalize direction to -1 to 1 unit vector
-	t = 0.5 * (unit_direction.y() + 1.0); // Blends between white and blue vertically since we use the y-component, scale to [0,1] [white, blue]
+	// Background gradient
+	vec3 unit_direction = unit_vector(r.direction()); // Normalize ray direction to -1 to 1 unit vector
+	auto t = 0.5 * (unit_direction.y() + 1.0); // Blends between white and blue vertically since we use the y-component, scale to [0,1] [white, blue]
 	return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0); // blendedValue = (1-t)*startValue + t*endValue
 }
 
@@ -62,6 +65,11 @@ int main()
 	auto viewport_height = 2.0;
 	auto viewport_width = aspect_ratio * viewport_height;;
 	auto focal_length = 1.0; // Distance from eye/camera to the viewport/projection plane
+
+	// World setup
+	hittable_list world;
+	world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
+	world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
 
 	// Camera setup
 	auto origin = point3(0, 0, 0);
@@ -87,7 +95,7 @@ int main()
 			auto u = double(i) / (image_width - 1); 
 			auto v = double(j) / (image_height - 1);
 			ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin); // Create ray
-			color pixel_color = ray_color(r); // Generate color based on the ray
+			color pixel_color = ray_color(r, world); // Find colors!
 			write_color(std::cout, pixel_color);
 		}
 	}
