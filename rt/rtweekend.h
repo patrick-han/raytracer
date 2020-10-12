@@ -2,6 +2,7 @@
 #define RTWEEKEND_H
 
 #include <cmath>
+#include <cstdlib>
 #include <limits>
 #include <memory>
 
@@ -28,6 +29,19 @@ inline double degrees_to_radians(double degrees)
 {
 	return degrees * pi / 180.0;
 }
+
+/*
+ * Requires:
+ *	Nothing
+ *
+ * Effects:
+ *	Returns a random real number [0, 1)
+ */
+inline double random_double() {
+	// Returns a random real in [0,1).
+	return rand() / (RAND_MAX + 1.0);
+}
+
 
 // Common Headers
 #include "ray.h"
