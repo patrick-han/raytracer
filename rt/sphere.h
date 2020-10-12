@@ -4,6 +4,9 @@
 #include "hittable.h"
 #include "vec3.h"
 
+/*
+ * Child class for a hittable sphere object
+ */
 class sphere : public hittable
 {
 public:
@@ -21,6 +24,13 @@ public:
 
 };
 
+/*
+ * Requires:
+ *	Incoming ray, bounds for t, rec (hit_record) to be modified
+ *
+ * Effects:
+ *	Returns true if an intersection occurs, writes the appropriate information in rec
+ */
 bool sphere::hit(const ray&r, double t_min, double t_max, hit_record& rec) const
 {
 	vec3 oc = r.origin() - center; // A - C

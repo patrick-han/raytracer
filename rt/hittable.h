@@ -2,6 +2,10 @@
 #define HITTABLE_H
 
 #include "ray.h"
+
+/* 
+ * Struct that stores, for a given ray intersection, normal and direction information
+ */
 struct hit_record
 {
 	point3 p;
