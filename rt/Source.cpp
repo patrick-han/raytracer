@@ -8,16 +8,23 @@
  *	Ray being shot from the camera, sphere center coordinates and radius
  *
  * Effects:
- *	Returns whether or not the ray intersections the sphere
+ *	Returns the appropriate t-value that gives us the ray-sphere intersection
  */
-bool hit_sphere(const point3& center, double radius, const ray& r)
+double hit_sphere(const point3& center, double radius, const ray& r)
 {
 	vec3 oc = r.origin() - center; // A - C --> Ray origin - Center coords of the sphere
 	auto a = dot(r.direction(), r.direction()); // t^2 * dot(b,b) = t^2 * a
 	auto b = 2.0 * dot(r.direction(), oc);
 	auto c = dot(oc, oc) - radius * radius;
 	auto discriminant = b * b - 4 * a * c;
-	return (discriminant > 0);
+	if (discriminant < 0)
+	{
+		return -1.0;
+	}
+	else
+	{
+		return (-b - sqrt(discriminant)) / (2.0 * a);
+	}
 }
 
 
@@ -30,12 +37,16 @@ bool hit_sphere(const point3& center, double radius, const ray& r)
  */
 color ray_color(const ray& r) 
 {
-	if (hit_sphere(point3(0, 0, -1), 0.5, r)) // Currently only tests whether ray hits the sphere at all, t < 0 works, need to fix this
+	auto t = hit_sphere(point3(0, 0, -1), 0.5, r);
+	if (t > 0.0)
 	{
-		return color(1, 0, 0); // Red sphere
+		// Calculate normal vector (-1, 1), scaling to (0, 1)
+		vec3 normal = unit_vector(r.at(t) - vec3(0, 0, -1)); // N = normalize( P ( on the sphere) - Center (of the sphere) )
+		return 0.5 * color(normal.x() + 1, normal.y() + 1, normal.z() + 1);
 	}
+
 	vec3 unit_direction = unit_vector(r.direction()); // Normalize direction to -1 to 1 unit vector
-	auto t = 0.5 * (unit_direction.y() + 1.0); // Blends between white and blue vertically since we use the y-component, scale to [0,1] [white, blue]
+	t = 0.5 * (unit_direction.y() + 1.0); // Blends between white and blue vertically since we use the y-component, scale to [0,1] [white, blue]
 	return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0); // blendedValue = (1-t)*startValue + t*endValue
 }
 
