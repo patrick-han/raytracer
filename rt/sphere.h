@@ -1,8 +1,10 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
+#include "rtweekend.h"
+
 #include "hittable.h"
-#include "vec3.h"
+
 
 /*
  * Child class for a hittable sphere object

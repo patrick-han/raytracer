@@ -1,7 +1,8 @@
 #ifndef HITTABLE_H
 #define HITTABLE_H
 
-#include "ray.h"
+#include "rtweekend.h"
+#include "ray.h"	
 
 /* 
  * Struct that stores, for a given ray intersection, normal and direction information

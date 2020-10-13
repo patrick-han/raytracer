@@ -37,10 +37,24 @@ inline double degrees_to_radians(double degrees)
  * Effects:
  *	Returns a random real number [0, 1)
  */
-inline double random_double() {
-	// Returns a random real in [0,1).
+inline double random_double()
+{
 	return rand() / (RAND_MAX + 1.0);
 }
+
+/*
+ * Requires:
+ *	Nothing
+ *
+ * Effects:
+ *	Returns a random real number [min,max)
+ */
+inline double random_double(double min, double max)
+{
+	return min + (max - min) * random_double();
+}
+
+
 
 /*
  * Requires:
@@ -54,6 +68,8 @@ inline double clamp(double x, double min, double max) {
 	if (x > max) return max;
 	return x;
 }
+
+
 
 
 // Common Headers

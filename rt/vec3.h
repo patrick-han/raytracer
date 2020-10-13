@@ -80,7 +80,17 @@ public:
 		return e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
 	}
 
+	// For generating random vectors [0, 1)
+	inline static vec3 random() 
+	{
+		return vec3(random_double(), random_double(), random_double());
+	}
 
+	// Or with [min, max)
+	inline static vec3 random(double min, double max) 
+	{
+		return vec3(random_double(min, max), random_double(min, max), random_double(min, max));
+	}
 
 };
 
@@ -146,5 +156,27 @@ inline vec3 unit_vector(vec3 v)
 {
 	return v / v.length();
 }
+
+
+/*
+* Requires:
+*	Nothing
+*
+* Effects:
+*	Generates and returns a point in the unit sphere via the rejection method
+*/
+vec3 random_in_unit_sphere() 
+{
+	while (true) 
+	{
+		auto p = vec3::random(-1, 1);
+		if (p.length_squared() >= 1)
+		{
+			continue;
+		}
+		return p;
+	}
+}
+
 
 #endif

@@ -1,11 +1,12 @@
-#include <iostream>
-
 #include "rtweekend.h"
 
 #include "camera.h"
 #include "color.h"
 #include "hittable_list.h"
 #include "sphere.h"
+
+
+#include <iostream>
 
 /*
  * Requires:
@@ -39,13 +40,23 @@ double hit_sphere(const point3& center, double radius, const ray& r)
  * Effects:
  *	Calculates and returns the color associated with the ray/pixel pair
  */
-color ray_color(const ray& r, const hittable& world) 
+color ray_color(const ray& r, const hittable& world, int depth) 
 {
+	// If we've exceeded the ray bounce limit, no more light is gathered.
+	if (depth <= 0)
+	{
+		return color(0, 0, 0);
+	}
+
 	// Actual scene objects
 	hit_record rec;
-	if (world.hit(r, 0, infinity, rec))
+
+	if (world.hit(r, 0.001, infinity, rec))
 	{
-		return 0.5 * (rec.normal + color(1, 1, 1));
+		// Diffuse, after intersecting object, generate a random ray from within a unit sphere 
+		// tangent to the intersection point on the object surface.
+		point3 target = rec.p + rec.normal + random_in_unit_sphere();
+		return 0.5 * ray_color(ray(rec.p, target - rec.p), world, depth - 1);
 	}
 
 	// Background gradient
@@ -57,11 +68,12 @@ color ray_color(const ray& r, const hittable& world)
 int main() 
 {
 
-	// Image aspect ratio and size
+	// Image setup
 	const auto aspect_ratio = 16.0 / 9.0;
 	const int image_width = 400;
 	const int image_height = static_cast<int>(image_width / aspect_ratio);
 	const int samples_per_pixel = 100;
+	const int max_depth = 50;
 
 	// Viewport setup
 	auto viewport_height = 2.0;
@@ -97,7 +109,7 @@ int main()
 				auto u = (i + random_double()) / (image_width - 1);
 				auto v = (j + random_double()) / (image_height - 1);
 				ray r = cam.get_ray(u, v);
-				pixel_color += ray_color(r, world);
+				pixel_color += ray_color(r, world, max_depth);
 			}
 			write_color(std::cout, pixel_color, samples_per_pixel);
 		}
