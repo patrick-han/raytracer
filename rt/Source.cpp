@@ -55,7 +55,7 @@ color ray_color(const ray& r, const hittable& world, int depth)
 	{
 		// Diffuse, after intersecting object, generate a random ray from within a unit sphere 
 		// tangent to the intersection point on the object surface.
-		point3 target = rec.p + rec.normal + random_in_unit_sphere();
+		point3 target = rec.p + rec.normal + random_unit_vector();
 		return 0.5 * ray_color(ray(rec.p, target - rec.p), world, depth - 1);
 	}
 

@@ -178,5 +178,20 @@ vec3 random_in_unit_sphere()
 	}
 }
 
+/*
+* Requires:
+*	Nothing
+*
+* Effects:
+*	Generates and returns a random unit vector
+*/
+vec3 random_unit_vector() 
+{
+	auto angle = random_double(0, 2 * pi);
+	auto z = random_double(-1, 1);
+	auto r = sqrt(1 - z * z);
+	return vec3(r * cos(angle), r * sin(angle), z);
+}
+
 
 #endif
