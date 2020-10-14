@@ -46,7 +46,7 @@ bool sphere::hit(const ray&r, double t_min, double t_max, hit_record& rec) const
 	if (discriminant > 0)
 	{
 		auto root = sqrt(discriminant);
-		auto temp = (-half_b - root) / a;
+		auto temp = (-half_b - root) / a; 
 		if (temp < t_max && temp > t_min)
 		{
 			// Record the intersection's info + calculate normal
@@ -58,7 +58,7 @@ bool sphere::hit(const ray&r, double t_min, double t_max, hit_record& rec) const
 			return true;
 		}
 
-		temp = (-half_b + root) / a;
+		temp = (-half_b + root) / a; // Subtle difference: The other solution to the quadratic
 		if (temp < t_max && temp > t_min)
 		{
 			rec.t = temp;
