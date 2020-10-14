@@ -2,7 +2,9 @@
 #define HITTABLE_H
 
 #include "rtweekend.h"
-#include "ray.h"	
+#include "ray.h"
+
+class material;
 
 /* 
  * Struct that stores, for a given ray intersection, normal and direction information
@@ -11,6 +13,7 @@ struct hit_record
 {
 	point3 p;
 	vec3 normal;
+	shared_ptr<material> mat_ptr;
 	double t;
 	bool front_face; // If true, ray is incoming from the outside
 

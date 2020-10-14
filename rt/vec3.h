@@ -193,5 +193,17 @@ vec3 random_unit_vector()
 	return vec3(r * cos(angle), r * sin(angle), z);
 }
 
+/*
+* Requires:
+*	Incident vector v and unit normal vector n
+*
+* Effects:
+*	Calculates and returns the vector that gets reflected on the other side of the normal.
+*   Since the normal vector is unit, this just uses scalar projection with a negation since the incident is coming in.
+*/
+vec3 reflect(const vec3& v, const vec3& n) 
+{
+	return v - 2 * dot(v, n) * n;
+}
 
 #endif
