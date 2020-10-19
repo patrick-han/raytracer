@@ -36,7 +36,7 @@ public:
 
 	vec3 operator-() const // Negate
 	{ 
-		return vec3(-e[0], -e[1], e[2]); 
+		return vec3(-e[0], -e[1], -e[2]); 
 	} 
 
 	// Index access (should I use size_t for indices?)
@@ -141,15 +141,15 @@ inline vec3 operator/(vec3 v, double t)
 inline double dot(const vec3 &u, const vec3 &v) 
 {
 	return u.e[0] * v.e[0]
-		+ u.e[1] * v.e[1]
-		+ u.e[2] * v.e[2];
+		 + u.e[1] * v.e[1]
+		 + u.e[2] * v.e[2];
 }
 
 inline vec3 cross(const vec3 &u, const vec3 &v) 
 {
 	return vec3(u.e[1] * v.e[2] - u.e[2] * v.e[1],
-		u.e[2] * v.e[0] - u.e[0] * v.e[2],
-		u.e[0] * v.e[1] - u.e[1] * v.e[0]);
+		        u.e[2] * v.e[0] - u.e[0] * v.e[2],
+		        u.e[0] * v.e[1] - u.e[1] * v.e[0]);
 }
 
 inline vec3 unit_vector(vec3 v) 
@@ -165,7 +165,7 @@ inline vec3 unit_vector(vec3 v)
 * Effects:
 *	Generates and returns a point in the unit sphere via the rejection method
 */
-vec3 random_in_unit_sphere() 
+inline vec3 random_in_unit_sphere() 
 {
 	while (true) 
 	{
@@ -185,7 +185,7 @@ vec3 random_in_unit_sphere()
 * Effects:
 *	Generates and returns a random unit vector
 */
-vec3 random_unit_vector() 
+inline vec3 random_unit_vector() 
 {
 	auto angle = random_double(0, 2 * pi);
 	auto z = random_double(-1, 1);
@@ -201,7 +201,7 @@ vec3 random_unit_vector()
 *	Calculates and returns the vector that gets reflected on the other side of the normal.
 *   Since the normal vector is unit, this just uses scalar projection with a negation since the incident is coming in.
 */
-vec3 reflect(const vec3& v, const vec3& n) 
+inline vec3 reflect(const vec3& v, const vec3& n) 
 {
 	return v - 2 * dot(v, n) * n;
 }
@@ -213,7 +213,7 @@ vec3 reflect(const vec3& v, const vec3& n)
 * Effects:
 *	Calculates and returns the refracted ray as vec3
 */
-vec3 refract(const vec3& uv, const vec3& n, double etai_over_etat) {
+inline vec3 refract(const vec3& uv, const vec3& n, double etai_over_etat) {
 	auto cos_theta = fmin(dot(-uv, n), 1.0);
 	vec3 r_out_perp = etai_over_etat * (uv + cos_theta * n);
 	vec3 r_out_parallel = -sqrt(fabs(1.0 - r_out_perp.length_squared())) * n;
