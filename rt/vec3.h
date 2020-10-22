@@ -195,6 +195,26 @@ inline vec3 random_unit_vector()
 
 /*
 * Requires:
+*	Nothing
+*
+* Effects:
+*	Generates and returns a random point inside the unit disk
+*/
+inline vec3 random_in_unit_disk() 
+{
+	while (true) 
+	{
+		auto p = vec3(random_double(-1, 1), random_double(-1, 1), 0);
+		if (p.length_squared() >= 1)
+		{
+			continue;
+		}
+		return p;
+	}
+}
+
+/*
+* Requires:
 *	Incident vector v and unit normal vector n
 *
 * Effects:
